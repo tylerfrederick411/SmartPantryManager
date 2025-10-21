@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SmartPantryManager">
+
+        <!-- Main Screen: Pantry Inventory -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Add or Edit Ingredient Screen -->
+        <activity
+            android:name=".activity.AddEditIngredientActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.MainActivity" />
+
+        <!-- Suggested Recipes Screen (Strict-Matching Algorithm) -->
+        <activity
+            android:name=".activity.SuggestedRecipesActivity"
+            android:exported="false"
+            android:label="Suggested Recipes"
+            android:parentActivityName=".activity.MainActivity" />
+
+        <!-- Recipe Detail Screen -->
+        <activity
+            android:name=".activity.RecipeDetailActivity"
+            android:exported="false"
+            android:label="Recipe Details"
+            android:parentActivityName=".activity.SuggestedRecipesActivity" />
+
+        <!-- Settings & Configuration Screen -->
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:exported="false"
+            android:label="Settings"
+            android:parentActivityName=".activity.MainActivity" />
+
+    </application>
+
+</manifest>
