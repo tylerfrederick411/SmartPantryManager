@@ -5,23 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <TextView
-        android:id="@+id/tvHeaderSettings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary"
-        android:padding="16dp"
-        android:text="Settings &amp; Info"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvHeaderSettings"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -34,8 +22,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="3dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -47,7 +35,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="App Preferences"
+                        android:text="Preferences"
                         android:textColor="@color/primary"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -65,7 +53,7 @@
                         android:id="@+id/switchShowAlmostThere"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Show 'Almost There' Recipes"
+                        android:text="Show Missing 1 Item Recipes"
                         android:textSize="15sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -73,8 +61,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="3dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -86,7 +74,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Database Management"
+                        android:text="Database"
                         android:textColor="@color/primary"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -95,7 +83,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Uses SQLite via SQLiteOpenHelper locally on-device. Persistent across restarts."
+                        android:text="Local SQLite database stored on device."
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp"
                         android:layout_marginBottom="12dp" />
@@ -106,6 +94,7 @@
                         android:layout_height="48dp"
                         android:backgroundTint="@color/error"
                         android:text="Reset Database to Defaults"
+                        android:textAllCaps="false"
                         android:textColor="@android:color/white" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -113,8 +102,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="3dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -125,7 +114,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Academic Assignment Information"
+                        android:text="Project Info"
                         android:textColor="@color/primary"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -135,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="3dp"
-                        android:text="Module: Mobile App Development 700\nInstitution: Richfield Graduate Institute of Technology\nArchitecture: Pure Java + SQLite\nStrict-Matching Algorithm Engine"
+                        android:text="Student: Tyler Frederick\nStudent ID: 402307075\nModule: Mobile App Development 700\nRichfield Graduate Institute of Technology"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -149,6 +138,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/surface"
+        app:elevation="8dp"
         app:itemIconTint="@color/primary"
         app:itemTextColor="@color/primary"
         app:menu="@menu/bottom_nav_menu"

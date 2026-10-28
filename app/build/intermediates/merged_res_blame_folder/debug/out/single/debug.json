@@ -1,27 +1,15 @@
 [
     {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_delete.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_delete.xml"
-    },
-    {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_pantry.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_pantry.xml"
-    },
-    {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_add_edit_ingredient.xml.flat",
         "source": "com.richfield.smartpantry.app-main-34:/layout/activity_add_edit_ingredient.xml"
-    },
-    {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_main.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/layout/activity_main.xml"
     },
     {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_recipe_detail.xml.flat",
         "source": "com.richfield.smartpantry.app-main-34:/layout/activity_recipe_detail.xml"
     },
     {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_check.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_check.xml"
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_main.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/layout/activity_main.xml"
     },
     {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_edit.xml.flat",
@@ -32,12 +20,12 @@
         "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_recipe.xml"
     },
     {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_suggested_recipes.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/layout/activity_suggested_recipes.xml"
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_btn_tab_inactive.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/btn_tab_inactive.xml"
     },
     {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_warning.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_warning.xml"
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_suggested_recipes.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/layout/activity_suggested_recipes.xml"
     },
     {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_item_recipe_ingredient.xml.flat",
@@ -48,8 +36,12 @@
         "source": "com.richfield.smartpantry.app-main-34:/layout/item_pantry.xml"
     },
     {
-        "merged": "com.richfield.smartpantry.app-merged_res-32:/menu_bottom_nav_menu.xml.flat",
-        "source": "com.richfield.smartpantry.app-main-34:/menu/bottom_nav_menu.xml"
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_btn_tab_active_amber.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/btn_tab_active_amber.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_quantity_badge.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/quantity_badge.xml"
     },
     {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_add.xml.flat",
@@ -60,11 +52,47 @@
         "source": "com.richfield.smartpantry.app-main-34:/layout/item_recipe.xml"
     },
     {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_badge_match_strict.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/badge_match_strict.xml"
+    },
+    {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_settings.xml.flat",
         "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_settings.xml"
     },
     {
         "merged": "com.richfield.smartpantry.app-merged_res-32:/layout_activity_settings.xml.flat",
         "source": "com.richfield.smartpantry.app-main-34:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_delete.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_delete.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_btn_tab_active.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/btn_tab_active.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_pantry.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_pantry.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_check.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_check.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_ic_warning.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/ic_warning.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_badge_match_missing.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/badge_match_missing.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/drawable_badge_match_almost.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/drawable/badge_match_almost.xml"
+    },
+    {
+        "merged": "com.richfield.smartpantry.app-merged_res-32:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.richfield.smartpantry.app-main-34:/menu/bottom_nav_menu.xml"
     }
 ]

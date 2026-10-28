@@ -2,7 +2,6 @@ R_DEF: Internal format may change without notice
 local
 color accent
 color background
-color badge_bg
 color error
 color primary
 color primary_dark
@@ -10,6 +9,12 @@ color surface
 color text_primary
 color text_secondary
 color warning
+drawable badge_match_almost
+drawable badge_match_missing
+drawable badge_match_strict
+drawable btn_tab_active
+drawable btn_tab_active_amber
+drawable btn_tab_inactive
 drawable ic_add
 drawable ic_check
 drawable ic_delete
@@ -18,6 +23,7 @@ drawable ic_pantry
 drawable ic_recipe
 drawable ic_settings
 drawable ic_warning
+drawable quantity_badge
 id bottomNavigation
 id btnCookedThis
 id btnDelete
@@ -31,7 +37,6 @@ id etExpiryDate
 id etIngredientName
 id etIngredientQuantity
 id fabAddIngredient
-id filterButtonsContainer
 id ivIngredientStatus
 id nav_pantry
 id nav_settings
@@ -43,6 +48,7 @@ id spinnerCategory
 id spinnerUnit
 id switchExpiryAlerts
 id switchShowAlmostThere
+id tabBarContainer
 id tvDetailCategory
 id tvDetailInstructions
 id tvDetailPrepTime
@@ -51,9 +57,6 @@ id tvEmptyPantry
 id tvEmptySuggested
 id tvFilterHeader
 id tvFormTitle
-id tvHeader
-id tvHeaderSettings
-id tvHeaderSuggested
 id tvIngredientAmount
 id tvIngredientName
 id tvItemCategory

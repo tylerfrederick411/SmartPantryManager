@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     private RecyclerView recyclerView;
     private PantryAdapter adapter;
     private List<PantryItem> pantryList;
-    private TextView tvEmptyState;
+    private View tvEmptyState;
     private FloatingActionButton fabAdd;
     private BottomNavigationView bottomNav;
     private DatabaseHelper dbHelper;

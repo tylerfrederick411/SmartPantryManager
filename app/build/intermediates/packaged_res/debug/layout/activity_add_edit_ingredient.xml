@@ -9,9 +9,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
+        app:cardCornerRadius="14dp"
+        app:cardElevation="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,16 +22,16 @@
                 android:id="@+id/tvFormTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Leftover Ingredient"
+                android:text="Add Leftover Item"
                 android:textColor="@color/primary"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ingredient Name *"
+                android:text="Ingredient Name"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold" />
 
@@ -40,14 +39,14 @@
                 android:id="@+id/etIngredientName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="e.g. Tomato, Milk, Egg"
+                android:hint="e.g. Eggs, Tomatoes, Milk"
                 android:inputType="textCapWords"
                 android:layout_marginBottom="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quantity *"
+                android:text="Quantity"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold" />
 
@@ -62,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Unit of Measure *"
+                android:text="Unit"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold" />
 
@@ -75,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Food Category"
+                android:text="Category"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold" />
 
@@ -111,6 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pick Date"
+                    android:textAllCaps="false"
                     android:backgroundTint="@color/primary"
                     android:textColor="@android:color/white" />
             </LinearLayout>
@@ -118,8 +118,9 @@
             <Button
                 android:id="@+id/btnSaveIngredient"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="50dp"
                 android:text="Save to Pantry"
+                android:textAllCaps="false"
                 android:textSize="16sp"
                 android:backgroundTint="@color/primary"
                 android:textColor="@android:color/white" />

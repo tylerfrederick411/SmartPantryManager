@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="accent">#4CAF50</color>
-    <color name="background">#F5F5F5</color>
-    <color name="badge_bg">#E8F5E9</color>
-    <color name="error">#C62828</color>
-    <color name="primary">#2E7D32</color>
-    <color name="primary_dark">#1B5E20</color>
+    <color name="accent">#40916C</color>
+    <color name="background">#F8F9FA</color>
+    <color name="error">#C53030</color>
+    <color name="primary">#2D6A4F</color>
+    <color name="primary_dark">#1B4332</color>
     <color name="surface">#FFFFFF</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="warning">#E65100</color>
+    <color name="text_primary">#2D3748</color>
+    <color name="text_secondary">#718096</color>
+    <color name="warning">#DD6B20</color>
     <string name="app_name">Smart Pantry Manager</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
@@ -25,6 +24,6 @@
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/accent</item>
         <item name="colorOnSecondary">@android:color/white</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 </resources>

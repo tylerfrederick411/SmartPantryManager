@@ -1356,7 +1356,6 @@ color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
 color background_material_light
-color badge_bg
 color bright_foreground_disabled_material_dark
 color bright_foreground_disabled_material_light
 color bright_foreground_inverse_material_dark
@@ -2976,6 +2975,9 @@ drawable abc_textfield_search_material
 drawable abc_vector_test
 drawable avd_hide_password
 drawable avd_show_password
+drawable badge_match_almost
+drawable badge_match_missing
+drawable badge_match_strict
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -2984,6 +2986,9 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable btn_tab_active
+drawable btn_tab_active_amber
+drawable btn_tab_inactive
 drawable design_fab_background
 drawable design_ic_visibility
 drawable design_ic_visibility_off
@@ -3080,6 +3085,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable quantity_badge
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -3282,7 +3288,6 @@ id fill
 id fill_horizontal
 id fill_vertical
 id filled
-id filterButtonsContainer
 id fitCenter
 id fitEnd
 id fitStart
@@ -3535,6 +3540,7 @@ id submit_area
 id supportScrollUp
 id switchExpiryAlerts
 id switchShowAlmostThere
+id tabBarContainer
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -3589,9 +3595,6 @@ id tvEmptyPantry
 id tvEmptySuggested
 id tvFilterHeader
 id tvFormTitle
-id tvHeader
-id tvHeaderSettings
-id tvHeaderSuggested
 id tvIngredientAmount
 id tvIngredientName
 id tvItemCategory
