@@ -124,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="3dp"
-                        android:text="Mobile App Development 700\nRichfield Graduate Institute of Technology\nSmart Pantry Manager"
+                        android:text="Student: Tyler Frederick\nStudent ID: 402307075\nModule: Mobile App Development 700\nRichfield Graduate Institute of Technology"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
                 </LinearLayout>
