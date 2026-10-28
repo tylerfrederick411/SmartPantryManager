@@ -100,7 +100,21 @@ public class IngredientMatcher {
             return (pantryQty / 1000.0) >= requiredQty;
         }
 
-        // Culinary approximations: 1 cup ~= 240 ml, 1 tbsp ~= 15 ml, 1 tsp ~= 5 ml
+        // Cup to tbsp & tsp: 1 cup = 16 tbsp = 48 tsp
+        if (normReqUnit.equals("tbsp") && normPantryUnit.equals("cup")) {
+            return (pantryQty * 16.0) >= requiredQty;
+        }
+        if (normReqUnit.equals("cup") && normPantryUnit.equals("tbsp")) {
+            return (pantryQty / 16.0) >= requiredQty;
+        }
+        if (normReqUnit.equals("tsp") && normPantryUnit.equals("cup")) {
+            return (pantryQty * 48.0) >= requiredQty;
+        }
+        if (normReqUnit.equals("cup") && normPantryUnit.equals("tsp")) {
+            return (pantryQty / 48.0) >= requiredQty;
+        }
+
+        // Tablespoon to teaspoon: 1 tbsp = 3 tsp
         if (normReqUnit.equals("tbsp") && normPantryUnit.equals("tsp")) {
             return (pantryQty / 3.0) >= requiredQty;
         }

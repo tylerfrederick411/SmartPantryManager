@@ -547,7 +547,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 {"Butter", "3", "tbsp", "2026-12-01", "Dairy & Eggs"},
                 {"Salt", "10", "tsp", "2027-01-01", "Pantry"},
                 {"Tomato", "2", "unit", "2026-11-02", "Produce"},
-                {"Bread", "6", "slice", "2026-11-04", "Bakery"}
+                {"Bread", "6", "slice", "2026-11-04", "Bakery"},
+                {"Onion", "2", "unit", "2026-11-20", "Produce"},
+                {"Cooking Oil", "5", "tbsp", "2027-01-01", "Pantry"},
+                {"Cheese", "100", "g", "2026-11-10", "Dairy & Eggs"}
         };
 
         for (String[] item : samplePantry) {
