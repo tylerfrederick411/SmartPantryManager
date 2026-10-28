@@ -1,6 +1,5 @@
 package com.richfield.smartpantry.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,11 +21,6 @@ import com.richfield.smartpantry.model.PantryItem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Screen 1: Pantry Management Screen.
- * Displays all current pantry items in a RecyclerView bound to SQLite.
- * Provides Add, Edit, Delete (CRUD) operations and persistent storage.
- */
 public class MainActivity extends AppCompatActivity implements PantryAdapter.OnItemActionListener {
 
     private RecyclerView recyclerView;
@@ -41,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("My Pantry");
+        }
 
         dbHelper = DatabaseHelper.getInstance(this);
 
@@ -59,17 +57,17 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
             startActivity(intent);
         });
 
-        setupBottomNavigation();
+        setupNavigation();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         bottomNav.setSelectedItemId(R.id.nav_pantry);
-        loadPantryItems();
+        loadPantry();
     }
 
-    private void loadPantryItems() {
+    private void loadPantry() {
         pantryList = dbHelper.getAllPantryItems();
         adapter.updateList(pantryList);
 
@@ -92,29 +90,27 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     @Override
     public void onDelete(PantryItem item) {
         new AlertDialog.Builder(this)
-                .setTitle("Delete Ingredient")
-                .setMessage("Are you sure you want to remove " + item.getName() + " from your pantry?")
+                .setTitle("Delete " + item.getName() + "?")
+                .setMessage("Are you sure you want to remove this item from your pantry?")
                 .setPositiveButton("Delete", (dialog, which) -> {
                     dbHelper.deletePantryItem(item.getId());
                     Toast.makeText(MainActivity.this, item.getName() + " deleted", Toast.LENGTH_SHORT).show();
-                    loadPantryItems();
+                    loadPantry();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void setupBottomNavigation() {
+    private void setupNavigation() {
         bottomNav.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_pantry) {
+            int id = item.getItemId();
+            if (id == R.id.nav_pantry) {
                 return true;
-            } else if (itemId == R.id.nav_suggested) {
-                Intent intent = new Intent(MainActivity.this, SuggestedRecipesActivity.class);
-                startActivity(intent);
+            } else if (id == R.id.nav_suggested) {
+                startActivity(new Intent(this, SuggestedRecipesActivity.class));
                 return true;
-            } else if (itemId == R.id.nav_settings) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
+            } else if (id == R.id.nav_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             }
             return false;

@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Encapsulates the strict evaluation of a recipe against the current pantry.
- * Used to classify recipes into "Strict Matches" (0 missing) or "Almost There" (1 missing).
- */
 public class RecipeMatchResult implements Serializable {
     private Recipe recipe;
     private int totalRequired;
@@ -51,16 +47,10 @@ public class RecipeMatchResult implements Serializable {
         return missingIngredients.size();
     }
 
-    /**
-     * The core rule: true if and only if EVERY required ingredient is satisfied.
-     */
     public boolean isStrictMatch() {
         return totalRequired > 0 && missingIngredients.isEmpty();
     }
 
-    /**
-     * Bonus stretch rule: missing exactly 1 ingredient.
-     */
     public boolean isAlmostThere() {
         return missingIngredients.size() == 1;
     }

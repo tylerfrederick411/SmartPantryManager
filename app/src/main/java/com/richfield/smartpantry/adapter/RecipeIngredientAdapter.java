@@ -18,10 +18,6 @@ import com.richfield.smartpantry.util.IngredientMatcher;
 
 import java.util.List;
 
-/**
- * Adapter displaying ingredient requirements for a single recipe,
- * showing whether each ingredient is currently available in the user's pantry.
- */
 public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientAdapter.IngredientViewHolder> {
 
     private Context context;
@@ -47,33 +43,32 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
         holder.tvIngredientName.setText(req.getIngredientName());
         holder.tvIngredientAmount.setText(req.getFormattedQuantity() + " " + req.getUnit());
 
-        // Check if user has this ingredient in pantry with sufficient quantity
-        boolean satisfied = false;
-        String userHasStr = "None";
+        boolean hasItem = false;
+        String inPantryText = "Not in pantry";
         String normReq = IngredientMatcher.normalizeName(req.getIngredientName());
 
         if (pantryItems != null) {
             for (PantryItem p : pantryItems) {
                 if (IngredientMatcher.normalizeName(p.getName()).equals(normReq)) {
-                    userHasStr = p.getFormattedQuantity() + " " + p.getUnit();
+                    inPantryText = "In pantry: " + p.getFormattedQuantity() + " " + p.getUnit();
                     if (IngredientMatcher.hasSufficientQuantity(req.getQuantity(), req.getUnit(), p.getQuantity(), p.getUnit())) {
-                        satisfied = true;
+                        hasItem = true;
                     }
                     break;
                 }
             }
         }
 
-        if (satisfied) {
+        if (hasItem) {
             holder.ivStatus.setImageResource(R.drawable.ic_check);
-            holder.ivStatus.setColorFilter(Color.parseColor("#2E7D32"));
-            holder.tvPantryStatus.setText("In Pantry: " + userHasStr + " (Sufficient)");
-            holder.tvPantryStatus.setTextColor(Color.parseColor("#2E7D32"));
+            holder.ivStatus.setColorFilter(Color.parseColor("#1E8449"));
+            holder.tvPantryStatus.setText(inPantryText + " (Enough)");
+            holder.tvPantryStatus.setTextColor(Color.parseColor("#1E8449"));
         } else {
             holder.ivStatus.setImageResource(R.drawable.ic_warning);
-            holder.ivStatus.setColorFilter(Color.parseColor("#C62828"));
-            holder.tvPantryStatus.setText("In Pantry: " + userHasStr + " (Missing / Insufficient)");
-            holder.tvPantryStatus.setTextColor(Color.parseColor("#C62828"));
+            holder.ivStatus.setColorFilter(Color.parseColor("#B03A2E"));
+            holder.tvPantryStatus.setText(inPantryText + " (Need more)");
+            holder.tvPantryStatus.setTextColor(Color.parseColor("#B03A2E"));
         }
     }
 

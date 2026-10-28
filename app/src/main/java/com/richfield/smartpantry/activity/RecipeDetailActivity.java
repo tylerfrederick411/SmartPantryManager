@@ -20,12 +20,6 @@ import com.richfield.smartpantry.model.Recipe;
 
 import java.util.List;
 
-/**
- * Screen 4: Recipe Detail Screen.
- * Shows full recipe information, complete required ingredients checklist comparing
- * with actual pantry stock, and preparation instructions.
- * Includes "I Made This!" button which dynamically updates pantry inventory in SQLite.
- */
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private TextView tvTitle, tvCategory, tvPrepTime, tvInstructions;
@@ -41,6 +35,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Recipe Details");
         }
 
         dbHelper = DatabaseHelper.getInstance(this);
@@ -60,13 +55,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
             }
         }
 
-        btnCooked.setOnClickListener(v -> confirmAndDeductPantry());
+        btnCooked.setOnClickListener(v -> confirmCook());
     }
 
     private void displayRecipe() {
         tvTitle.setText(recipe.getName());
         tvCategory.setText(recipe.getCategory());
-        tvPrepTime.setText("Prep Time: " + recipe.getPrepTimeMinutes() + " minutes");
+        tvPrepTime.setText("Prep Time: " + recipe.getPrepTimeMinutes() + " mins");
         tvInstructions.setText(recipe.getInstructions().replace("\\n", "\n"));
 
         List<PantryItem> pantry = dbHelper.getAllPantryItems();
@@ -75,14 +70,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
         rvIngredients.setAdapter(adapter);
     }
 
-    private void confirmAndDeductPantry() {
+    private void confirmCook() {
         new AlertDialog.Builder(this)
-                .setTitle("Mark Recipe as Cooked?")
-                .setMessage("This will automatically deduct the used ingredients from your pantry database.")
+                .setTitle("Made This Recipe?")
+                .setMessage("This will deduct the used ingredients from your pantry list.")
                 .setPositiveButton("Confirm", (dialog, which) -> {
                     dbHelper.deductIngredientsForRecipe(recipe);
-                    Toast.makeText(this, "Pantry ingredients updated! Great job reducing waste!", Toast.LENGTH_LONG).show();
-                    displayRecipe(); // Refresh ingredient checklist
+                    Toast.makeText(this, "Pantry updated! Ingredients deducted.", Toast.LENGTH_SHORT).show();
+                    displayRecipe();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();

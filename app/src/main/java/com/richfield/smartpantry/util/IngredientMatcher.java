@@ -8,25 +8,13 @@ import com.richfield.smartpantry.model.RecipeMatchResult;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Business logic engine for the Smart Pantry Manager.
- * Implements Section 2.3 Strict-Matching Rule:
- * 1. Case-insensitive and trimmed string matching.
- * 2. Robust singular/plural handling (e.g. "tomatoes" vs "tomato", "cloves" vs "clove").
- * 3. Unit normalization and equivalence checking.
- * 4. Strict sufficiency test: pantry quantity >= required quantity.
- */
 public class IngredientMatcher {
 
-    /**
-     * Normalizes ingredient names to a canonical singular lower-case representation.
-     * Robust against real-world messiness without heavy external NLP libraries.
-     */
+    // Helper to clean up plurals and lowercase names for comparing
     public static String normalizeName(String name) {
         if (name == null) return "";
         String clean = name.trim().toLowerCase(Locale.ROOT);
 
-        // Normalize irregular or common culinary plurals
         if (clean.endsWith("tomatoes")) return clean.replace("tomatoes", "tomato");
         if (clean.endsWith("potatoes")) return clean.replace("potatoes", "potato");
         if (clean.endsWith("berries")) return clean.substring(0, clean.length() - 3) + "y";
@@ -38,20 +26,16 @@ public class IngredientMatcher {
         if (clean.endsWith("apples")) return clean.substring(0, clean.length() - 1);
         if (clean.endsWith("bananas")) return clean.substring(0, clean.length() - 1);
         if (clean.endsWith("peppers")) return clean.substring(0, clean.length() - 1);
-        if (clean.endsWith("sausages")) return clean.substring(0, clean.length() - 1);
         if (clean.endsWith("mushrooms")) return clean.substring(0, clean.length() - 1);
 
-        // General trailing 's' plural rule (if word length > 3 and doesn't end in 'ss')
-        if (clean.length() > 3 && clean.endsWith("s") && !clean.endsWith("ss") && !clean.endsWith("us")) {
+        if (clean.length() > 3 && clean.endsWith("s") && !clean.endsWith("ss")) {
             return clean.substring(0, clean.length() - 1);
         }
 
         return clean;
     }
 
-    /**
-     * Normalizes unit strings (e.g., "tbsp", "tablespoon", "tablespoons" -> "tbsp").
-     */
+    // Helper to standardize common unit words
     public static String normalizeUnit(String unit) {
         if (unit == null) return "unit";
         String u = unit.trim().toLowerCase(Locale.ROOT);
@@ -65,71 +49,61 @@ public class IngredientMatcher {
         if (u.equals("can") || u.equals("cans")) return "can";
         if (u.equals("slice") || u.equals("slices")) return "slice";
         if (u.equals("clove") || u.equals("cloves")) return "clove";
-        if (u.equals("unit") || u.equals("units") || u.equals("piece") || u.equals("pieces") || u.equals("item") || u.equals("items") || u.isEmpty()) {
+        if (u.equals("unit") || u.equals("units") || u.equals("piece") || u.equals("pieces") || u.equals("item") || u.isEmpty()) {
             return "unit";
         }
         return u;
     }
 
-    /**
-     * Checks if units are directly comparable or can be converted.
-     * Returns true if compatible and pantry has >= required quantity.
-     */
+    // Checks if the pantry has enough quantity and converts units if needed
     public static boolean hasSufficientQuantity(double requiredQty, String requiredUnit, double pantryQty, String pantryUnit) {
-        String normReqUnit = normalizeUnit(requiredUnit);
-        String normPantryUnit = normalizeUnit(pantryUnit);
+        String reqUnit = normalizeUnit(requiredUnit);
+        String pUnit = normalizeUnit(pantryUnit);
 
-        // Same normalized unit
-        if (normReqUnit.equals(normPantryUnit)) {
+        if (reqUnit.equals(pUnit)) {
             return pantryQty >= requiredQty;
         }
 
-        // Mass conversion: kg to g
-        if (normReqUnit.equals("g") && normPantryUnit.equals("kg")) {
+        // mass conversions
+        if (reqUnit.equals("g") && pUnit.equals("kg")) {
             return (pantryQty * 1000.0) >= requiredQty;
         }
-        if (normReqUnit.equals("kg") && normPantryUnit.equals("g")) {
+        if (reqUnit.equals("kg") && pUnit.equals("g")) {
             return (pantryQty / 1000.0) >= requiredQty;
         }
 
-        // Volume conversion: l to ml
-        if (normReqUnit.equals("ml") && normPantryUnit.equals("l")) {
+        // volume conversions
+        if (reqUnit.equals("ml") && pUnit.equals("l")) {
             return (pantryQty * 1000.0) >= requiredQty;
         }
-        if (normReqUnit.equals("l") && normPantryUnit.equals("ml")) {
+        if (reqUnit.equals("l") && pUnit.equals("ml")) {
             return (pantryQty / 1000.0) >= requiredQty;
         }
 
-        // Cup to tbsp & tsp: 1 cup = 16 tbsp = 48 tsp
-        if (normReqUnit.equals("tbsp") && normPantryUnit.equals("cup")) {
+        // cup and spoon conversions
+        if (reqUnit.equals("tbsp") && pUnit.equals("cup")) {
             return (pantryQty * 16.0) >= requiredQty;
         }
-        if (normReqUnit.equals("cup") && normPantryUnit.equals("tbsp")) {
+        if (reqUnit.equals("cup") && pUnit.equals("tbsp")) {
             return (pantryQty / 16.0) >= requiredQty;
         }
-        if (normReqUnit.equals("tsp") && normPantryUnit.equals("cup")) {
+        if (reqUnit.equals("tsp") && pUnit.equals("cup")) {
             return (pantryQty * 48.0) >= requiredQty;
         }
-        if (normReqUnit.equals("cup") && normPantryUnit.equals("tsp")) {
+        if (reqUnit.equals("cup") && pUnit.equals("tsp")) {
             return (pantryQty / 48.0) >= requiredQty;
         }
-
-        // Tablespoon to teaspoon: 1 tbsp = 3 tsp
-        if (normReqUnit.equals("tbsp") && normPantryUnit.equals("tsp")) {
+        if (reqUnit.equals("tbsp") && pUnit.equals("tsp")) {
             return (pantryQty / 3.0) >= requiredQty;
         }
-        if (normReqUnit.equals("tsp") && normPantryUnit.equals("tbsp")) {
+        if (reqUnit.equals("tsp") && pUnit.equals("tbsp")) {
             return (pantryQty * 3.0) >= requiredQty;
         }
 
-        // If generic unit or unconvertible, compare direct values
         return pantryQty >= requiredQty;
     }
 
-    /**
-     * Evaluates a single recipe against the full pantry list.
-     * Returns a RecipeMatchResult detailing strictly satisfied and missing ingredients.
-     */
+    // Compares a recipe against what is in the pantry
     public static RecipeMatchResult evaluateRecipe(Recipe recipe, List<PantryItem> pantry) {
         RecipeMatchResult result = new RecipeMatchResult(recipe);
 

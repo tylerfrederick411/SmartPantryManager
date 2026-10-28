@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Model representing a recipe in the database.
- */
 public class Recipe implements Serializable {
     private long id;
     private String name;

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.richfield.smartpantry.model.PantryItem;
 import com.richfield.smartpantry.model.Recipe;
@@ -15,52 +14,44 @@ import com.richfield.smartpantry.util.IngredientMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * SQLite Database Manager for Smart Pantry Manager.
- * Implements persistent local storage using SQLiteOpenHelper as required by Section 3.2.
- * Handles full CRUD operations on Pantry Items and seeds 20 initial recipes.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "smart_pantry.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Table names
+    // table names
     public static final String TABLE_PANTRY = "pantry";
     public static final String TABLE_RECIPES = "recipes";
     public static final String TABLE_RECIPE_INGREDIENTS = "recipe_ingredients";
 
-    // Common columns
     public static final String COLUMN_ID = "_id";
 
-    // Pantry columns
+    // pantry columns
     public static final String COLUMN_PANTRY_NAME = "name";
     public static final String COLUMN_PANTRY_QUANTITY = "quantity";
     public static final String COLUMN_PANTRY_UNIT = "unit";
     public static final String COLUMN_PANTRY_EXPIRY = "expiry_date";
     public static final String COLUMN_PANTRY_CATEGORY = "category";
 
-    // Recipes columns
+    // recipe columns
     public static final String COLUMN_RECIPE_NAME = "name";
     public static final String COLUMN_RECIPE_CATEGORY = "category";
     public static final String COLUMN_RECIPE_PREP_TIME = "prep_time_minutes";
     public static final String COLUMN_RECIPE_INSTRUCTIONS = "instructions";
 
-    // Recipe Ingredients columns
+    // ingredient columns
     public static final String COLUMN_RI_RECIPE_ID = "recipe_id";
     public static final String COLUMN_RI_INGREDIENT_NAME = "ingredient_name";
     public static final String COLUMN_RI_QUANTITY = "quantity";
     public static final String COLUMN_RI_UNIT = "unit";
 
-    // Singleton instance to prevent multiple database helper leaks
-    private static DatabaseHelper sInstance;
+    private static DatabaseHelper instance;
 
     public static synchronized DatabaseHelper getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new DatabaseHelper(context.getApplicationContext());
+        if (instance == null) {
+            instance = new DatabaseHelper(context.getApplicationContext());
         }
-        return sInstance;
+        return instance;
     }
 
     public DatabaseHelper(Context context) {
@@ -69,42 +60,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create Pantry Table
-        String createPantryTable = "CREATE TABLE " + TABLE_PANTRY + " (" +
+        String createPantry = "CREATE TABLE " + TABLE_PANTRY + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_PANTRY_NAME + " TEXT NOT NULL, " +
                 COLUMN_PANTRY_QUANTITY + " REAL NOT NULL, " +
                 COLUMN_PANTRY_UNIT + " TEXT NOT NULL, " +
                 COLUMN_PANTRY_EXPIRY + " TEXT, " +
-                COLUMN_PANTRY_CATEGORY + " TEXT" +
-                ");";
-        db.execSQL(createPantryTable);
+                COLUMN_PANTRY_CATEGORY + " TEXT);";
+        db.execSQL(createPantry);
 
-        // Create Recipes Table
-        String createRecipesTable = "CREATE TABLE " + TABLE_RECIPES + " (" +
+        String createRecipes = "CREATE TABLE " + TABLE_RECIPES + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_RECIPE_NAME + " TEXT NOT NULL, " +
                 COLUMN_RECIPE_CATEGORY + " TEXT, " +
                 COLUMN_RECIPE_PREP_TIME + " INTEGER, " +
-                COLUMN_RECIPE_INSTRUCTIONS + " TEXT NOT NULL" +
-                ");";
-        db.execSQL(createRecipesTable);
+                COLUMN_RECIPE_INSTRUCTIONS + " TEXT NOT NULL);";
+        db.execSQL(createRecipes);
 
-        // Create Recipe Ingredients Table
-        String createRecipeIngredientsTable = "CREATE TABLE " + TABLE_RECIPE_INGREDIENTS + " (" +
+        String createRecipeIngredients = "CREATE TABLE " + TABLE_RECIPE_INGREDIENTS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_RI_RECIPE_ID + " INTEGER NOT NULL, " +
                 COLUMN_RI_INGREDIENT_NAME + " TEXT NOT NULL, " +
                 COLUMN_RI_QUANTITY + " REAL NOT NULL, " +
                 COLUMN_RI_UNIT + " TEXT NOT NULL, " +
-                "FOREIGN KEY(" + COLUMN_RI_RECIPE_ID + ") REFERENCES " + TABLE_RECIPES + "(" + COLUMN_ID + ") ON DELETE CASCADE" +
-                ");";
-        db.execSQL(createRecipeIngredientsTable);
+                "FOREIGN KEY(" + COLUMN_RI_RECIPE_ID + ") REFERENCES " + TABLE_RECIPES + "(" + COLUMN_ID + ") ON DELETE CASCADE);";
+        db.execSQL(createRecipeIngredients);
 
-        // Seed 20 recipes with detailed ingredients
-        seedInitialRecipes(db);
-
-        // Seed initial sample pantry items for instant testing
+        seedRecipes(db);
         seedSamplePantry(db);
     }
 
@@ -116,13 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // ==========================================
-    // PANTRY CRUD OPERATIONS (Create, Read, Update, Delete)
-    // ==========================================
-
-    /**
-     * CREATE: Add a new pantry item.
-     */
+    // Insert new pantry item
     public long insertPantryItem(PantryItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -137,9 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    /**
-     * READ: Get a single pantry item by ID.
-     */
+    // Get item by id
     public PantryItem getPantryItem(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PANTRY, null, COLUMN_ID + " = ?",
@@ -154,9 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    /**
-     * READ: Retrieve all pantry items ordered alphabetically.
-     */
+    // Get all pantry items
     public List<PantryItem> getAllPantryItems() {
         List<PantryItem> items = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -171,9 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return items;
     }
 
-    /**
-     * UPDATE: Modify an existing pantry item.
-     */
+    // Update item
     public int updatePantryItem(PantryItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -187,9 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(item.getId())});
     }
 
-    /**
-     * DELETE: Remove a pantry item by ID.
-     */
+    // Delete item
     public int deletePantryItem(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_PANTRY, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
@@ -205,13 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new PantryItem(id, name, quantity, unit, expiry, category);
     }
 
-    // ==========================================
-    // RECIPES QUERIES
-    // ==========================================
-
-    /**
-     * Retrieve all seeded recipes with their associated required ingredients.
-     */
+    // Fetch all recipes with their ingredients
     public List<Recipe> getAllRecipesWithIngredients() {
         List<Recipe> recipes = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -273,10 +235,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    /**
-     * Deducts used recipe ingredients from the user's pantry.
-     * If an item's quantity reaches zero or below, it is automatically removed.
-     */
+    // Deduct ingredients when cooking a recipe
     public void deductIngredientsForRecipe(Recipe recipe) {
         if (recipe == null || recipe.getIngredients() == null) return;
         List<PantryItem> pantryItems = getAllPantryItems();
@@ -298,25 +257,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * Reset the database to initial clean factory state with sample items and 20 recipes.
-     */
+    // Reset database back to default state
     public void resetToDefaults() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RECIPE_INGREDIENTS, null, null);
         db.delete(TABLE_RECIPES, null, null);
         db.delete(TABLE_PANTRY, null, null);
-        seedInitialRecipes(db);
+        seedRecipes(db);
         seedSamplePantry(db);
     }
 
-    // ==========================================
-    // DATABASE SEEDING: 20 PRE-LOADED RECIPES
-    // ==========================================
-    private void seedInitialRecipes(SQLiteDatabase db) {
-        // Recipe 1: Classic Scrambled Eggs
+    private void seedRecipes(SQLiteDatabase db) {
         addRecipe(db, "Classic Scrambled Eggs", "Breakfast", 10,
-                "1. Crack eggs into a bowl, add milk and a pinch of salt.\n2. Whisk thoroughly until smooth and airy.\n3. Melt butter in a non-stick skillet over medium-low heat.\n4. Pour in eggs and gently pull curds across the pan with a spatula.\n5. Remove from heat just before fully set and serve immediately.",
+                "1. Crack eggs into a bowl, add milk and a pinch of salt.\n2. Whisk thoroughly until smooth.\n3. Melt butter in a non-stick pan over medium heat.\n4. Pour in eggs and gently stir until cooked.",
                 new String[][]{
                         {"Egg", "3", "unit"},
                         {"Butter", "1", "tbsp"},
@@ -324,9 +277,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 2: Tomato & Herb Omelette
         addRecipe(db, "Tomato & Herb Omelette", "Breakfast", 12,
-                "1. Whisk eggs with salt and pepper in a bowl.\n2. Heat olive oil or butter in a skillet.\n3. Sauté diced tomato and chopped onion for 2 minutes.\n4. Pour whisked eggs over the vegetables.\n5. Cook until edges set, fold in half, and serve hot.",
+                "1. Whisk eggs with salt in a bowl.\n2. Heat butter or oil in a pan.\n3. Sauté diced tomato and onion for 2 minutes.\n4. Pour eggs over vegetables and cook until golden.",
                 new String[][]{
                         {"Egg", "2", "unit"},
                         {"Tomato", "1", "unit"},
@@ -335,29 +287,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 3: Golden French Toast
         addRecipe(db, "Golden French Toast", "Breakfast", 15,
-                "1. Whisk together eggs, milk, and sugar in a shallow dish.\n2. Dip bread slices on both sides until soaked but not soggy.\n3. Melt butter in a pan over medium heat.\n4. Fry each bread slice for 3-4 minutes per side until golden brown.\n5. Serve with syrup or fruit.",
+                "1. Whisk eggs and milk in a bowl.\n2. Dip bread slices on both sides.\n3. Melt butter in a pan.\n4. Fry each slice 3 minutes per side until golden brown.",
                 new String[][]{
                         {"Bread", "4", "slice"},
                         {"Egg", "2", "unit"},
                         {"Milk", "0.5", "cup"},
-                        {"Butter", "1", "tbsp"},
-                        {"Sugar", "1", "tbsp"}
+                        {"Butter", "1", "tbsp"}
                 });
 
-        // Recipe 4: Crispy Grilled Cheese Sandwich
         addRecipe(db, "Crispy Grilled Cheese Sandwich", "Lunch", 10,
-                "1. Butter one side of each slice of bread.\n2. Place cheese between the unbuttered sides of bread.\n3. Place sandwich on skillet over medium-low heat.\n4. Toast until golden brown (approx 3-4 mins), flip and toast other side until cheese melts completely.",
+                "1. Butter one side of each slice of bread.\n2. Place cheese between bread slices.\n3. Toast in skillet on medium heat until cheese melts.",
                 new String[][]{
                         {"Bread", "2", "slice"},
                         {"Cheese", "50", "g"},
                         {"Butter", "1", "tbsp"}
                 });
 
-        // Recipe 5: Quick Garlic Butter Rice
         addRecipe(db, "Quick Garlic Butter Rice", "Dinner", 15,
-                "1. Heat butter in a pan over medium heat.\n2. Add minced garlic and sauté until fragrant (approx 1 minute).\n3. Add leftover cooked rice and stir thoroughly to coat with garlic butter.\n4. Season with salt and black pepper, cooking for 5 minutes until heated through.",
+                "1. Heat butter in a pan.\n2. Add minced garlic and cook 1 minute.\n3. Add cooked rice and season with salt.\n4. Stir-fry for 4 minutes until warm.",
                 new String[][]{
                         {"Cooked Rice", "2", "cup"},
                         {"Butter", "2", "tbsp"},
@@ -365,9 +313,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 6: Classic Egg Fried Rice
         addRecipe(db, "Classic Egg Fried Rice", "Dinner", 15,
-                "1. Heat oil in a wok or large pan over high heat.\n2. Sauté chopped onion and garlic until fragrant.\n3. Push vegetables to the side, crack eggs into the pan and scramble quickly.\n4. Add cooked rice and soy sauce, tossing continuously for 3-4 minutes.\n5. Season with salt and serve hot.",
+                "1. Heat oil in a pan.\n2. Sauté chopped onion and garlic.\n3. Scramble eggs in pan, then add rice and soy sauce.\n4. Stir-fry 3 minutes and serve.",
                 new String[][]{
                         {"Cooked Rice", "2", "cup"},
                         {"Egg", "2", "unit"},
@@ -376,9 +323,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Cooking Oil", "2", "tbsp"}
                 });
 
-        // Recipe 7: Simple Tomato & Basil Pasta
         addRecipe(db, "Simple Tomato Pasta", "Dinner", 20,
-                "1. Boil pasta in salted water until al dente, drain and reserve 1/4 cup water.\n2. Heat olive oil in a pan, sauté minced garlic and diced tomatoes until softened.\n3. Simmer sauce for 8 minutes until thickened; season with salt.\n4. Toss pasta into the tomato sauce with reserved water and coat evenly.",
+                "1. Boil pasta in salted water and drain.\n2. Heat olive oil, cook minced garlic and chopped tomatoes into a sauce.\n3. Toss pasta in sauce and season with salt.",
                 new String[][]{
                         {"Pasta", "200", "g"},
                         {"Tomato", "3", "unit"},
@@ -387,9 +333,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 8: Rustic Potato & Onion Hash
         addRecipe(db, "Rustic Potato & Onion Hash", "Breakfast", 25,
-                "1. Dice potatoes into small cubes.\n2. Heat oil in a skillet, add potatoes and cover for 8 minutes to soften.\n3. Add sliced onions and season with salt and black pepper.\n4. Fry uncovered on medium-high heat, turning occasionally until potatoes are golden and crispy.",
+                "1. Dice potatoes into small cubes.\n2. Heat oil in skillet, fry potatoes with lid on for 8 minutes.\n3. Add sliced onions and salt, cook uncovered until crispy.",
                 new String[][]{
                         {"Potato", "3", "unit"},
                         {"Onion", "1", "unit"},
@@ -397,9 +342,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 9: Creamy Mashed Potatoes
         addRecipe(db, "Creamy Mashed Potatoes", "Side Dish", 20,
-                "1. Peel and cube potatoes; boil in salted water until fork-tender (approx 15 mins).\n2. Drain water completely.\n3. Add warm milk, butter, and salt to the pot.\n4. Mash until smooth, fluffy, and creamy.",
+                "1. Peel and cube potatoes; boil in salted water for 15 minutes.\n2. Drain water, add warm milk, butter, and salt.\n3. Mash until smooth.",
                 new String[][]{
                         {"Potato", "4", "unit"},
                         {"Butter", "2", "tbsp"},
@@ -407,9 +351,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 10: Banana Oat Pancakes
         addRecipe(db, "Banana Oat Pancakes", "Breakfast", 15,
-                "1. Mash ripe bananas in a bowl with a fork until smooth.\n2. Whisk in eggs and milk.\n3. Stir in rolled oats or flour until combined into a thick batter.\n4. Cook 1/4 cup scoops on a greased pan over medium heat for 2-3 mins per side.",
+                "1. Mash bananas in a bowl.\n2. Whisk in eggs and milk.\n3. Stir in oats to make batter.\n4. Cook 1/4 cup scoops on pan 2 minutes each side.",
                 new String[][]{
                         {"Banana", "2", "unit"},
                         {"Egg", "2", "unit"},
@@ -417,18 +360,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Milk", "0.25", "cup"}
                 });
 
-        // Recipe 11: Warm Honey Oatmeal
         addRecipe(db, "Warm Honey Oatmeal", "Breakfast", 10,
-                "1. Combine oats and milk in a small saucepan.\n2. Bring to a gentle boil over medium heat, stirring frequently.\n3. Lower heat and simmer for 5 minutes until thickened.\n4. Spoon into a bowl and drizzle generously with honey.",
+                "1. Combine oats and milk in a pot.\n2. Bring to a simmer, stirring frequently for 5 minutes.\n3. Pour into bowl and drizzle honey.",
                 new String[][]{
                         {"Rolled Oats", "1", "cup"},
                         {"Milk", "1.5", "cup"},
                         {"Honey", "2", "tbsp"}
                 });
 
-        // Recipe 12: Classic Tuna Salad
         addRecipe(db, "Classic Tuna Salad", "Lunch", 10,
-                "1. Drain canned tuna and transfer to a mixing bowl.\n2. Add mayonnaise, finely diced onion, and lemon juice.\n3. Season with salt and mix thoroughly with a fork.\n4. Serve on bread or with crackers.",
+                "1. Drain canned tuna and place in a bowl.\n2. Add mayonnaise, diced onion, and lemon juice.\n3. Season with salt and mix well.",
                 new String[][]{
                         {"Canned Tuna", "1", "can"},
                         {"Mayonnaise", "2", "tbsp"},
@@ -436,9 +377,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Lemon", "1", "unit"}
                 });
 
-        // Recipe 13: Garlic Sautéed Spinach
         addRecipe(db, "Garlic Sautéed Spinach", "Side Dish", 8,
-                "1. Heat olive oil in a large skillet over medium-high heat.\n2. Add sliced garlic and cook for 30 seconds until aromatic.\n3. Add fresh spinach in batches, tossing until wilted (approx 2 minutes).\n4. Sprinkle with salt and serve immediately.",
+                "1. Heat olive oil in a pan.\n2. Sauté garlic 30 seconds.\n3. Add fresh spinach and cook 2 minutes until wilted.\n4. Sprinkle salt.",
                 new String[][]{
                         {"Spinach", "200", "g"},
                         {"Garlic", "2", "clove"},
@@ -446,9 +386,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "0.5", "tsp"}
                 });
 
-        // Recipe 14: Refreshing Cucumber & Tomato Salad
         addRecipe(db, "Cucumber & Tomato Salad", "Salad", 10,
-                "1. Dice cucumber and tomatoes into bite-sized chunks.\n2. Thinly slice the onion.\n3. Toss vegetables together in a salad bowl.\n4. Drizzle with olive oil, lemon juice, and season with salt.",
+                "1. Chop cucumber and tomatoes into bite sizes.\n2. Slice onion.\n3. Toss in bowl with olive oil, lemon juice, and salt.",
                 new String[][]{
                         {"Cucumber", "1", "unit"},
                         {"Tomato", "2", "unit"},
@@ -457,9 +396,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "0.5", "tsp"}
                 });
 
-        // Recipe 15: Easy Vegetable Stir Fry
         addRecipe(db, "Easy Vegetable Stir Fry", "Dinner", 15,
-                "1. Chop carrot and broccoli florets into bite-sized pieces.\n2. Heat cooking oil in a large skillet over high heat.\n3. Add minced garlic and sliced onion, cooking for 1 minute.\n4. Add broccoli and carrots, stir-frying vigorously for 5 minutes.\n5. Splash with soy sauce and serve hot.",
+                "1. Chop carrot and broccoli into pieces.\n2. Heat oil in skillet, sauté garlic and onion.\n3. Add carrots and broccoli, stir-fry 5 minutes with soy sauce.",
                 new String[][]{
                         {"Carrot", "2", "unit"},
                         {"Broccoli", "1", "unit"},
@@ -468,9 +406,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Cooking Oil", "1", "tbsp"}
                 });
 
-        // Recipe 16: Crispy Seasoned Potato Wedges
         addRecipe(db, "Crispy Seasoned Potato Wedges", "Snack", 30,
-                "1. Cut washed potatoes into wedges.\n2. Toss wedges in olive oil, salt, and minced garlic in a bowl.\n3. Arrange in a single layer on a baking tray or skillet.\n4. Cook at medium-high heat until crisp on the outside and tender inside.",
+                "1. Cut potatoes into wedges.\n2. Toss in olive oil, salt, and minced garlic.\n3. Fry or bake until crispy outside and tender inside.",
                 new String[][]{
                         {"Potato", "3", "unit"},
                         {"Olive Oil", "2", "tbsp"},
@@ -478,9 +415,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 17: Cheesy Egg Quesadilla
         addRecipe(db, "Cheesy Egg Quesadilla", "Lunch", 12,
-                "1. Whisk eggs with salt and scramble lightly in butter, then remove.\n2. Lay tortilla in pan, cover half with shredded cheese and scrambled eggs.\n3. Fold tortilla in half.\n4. Toast both sides in skillet until cheese melts and tortilla is golden brown.",
+                "1. Scramble eggs lightly in butter.\n2. Place tortilla in pan, fill with cheese and scrambled eggs.\n3. Fold and toast both sides until cheese melts.",
                 new String[][]{
                         {"Tortilla", "2", "unit"},
                         {"Egg", "2", "unit"},
@@ -488,9 +424,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Butter", "1", "tbsp"}
                 });
 
-        // Recipe 18: Tomato & Cheese Open Toast
         addRecipe(db, "Tomato & Cheese Open Toast", "Snack", 8,
-                "1. Toast bread slices lightly.\n2. Layer thin tomato slices over the bread.\n3. Top with slices or shreds of cheese.\n4. Broil or pan-cover until cheese melts bubble-hot. Season with salt.",
+                "1. Toast bread lightly.\n2. Top with sliced tomato and cheese.\n3. Broil or pan-toast until cheese melts, sprinkle salt.",
                 new String[][]{
                         {"Bread", "2", "slice"},
                         {"Tomato", "1", "unit"},
@@ -498,9 +433,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "0.5", "tsp"}
                 });
 
-        // Recipe 19: Garlic Butter Pasta
         addRecipe(db, "Garlic Butter Pasta", "Dinner", 15,
-                "1. Cook pasta in boiling salted water until tender; drain.\n2. In same pot, melt butter over low heat.\n3. Sauté minced garlic for 1 minute until fragrant.\n4. Return pasta to pot, tossing vigorously with the garlic butter and salt.",
+                "1. Boil pasta and drain.\n2. Melt butter in pot and cook minced garlic 1 minute.\n3. Toss pasta in garlic butter and season with salt.",
                 new String[][]{
                         {"Pasta", "200", "g"},
                         {"Butter", "2", "tbsp"},
@@ -508,9 +442,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         {"Salt", "1", "tsp"}
                 });
 
-        // Recipe 20: Hearty Chickpea & Lemon Salad
         addRecipe(db, "Hearty Chickpea Salad", "Salad", 10,
-                "1. Rinse and drain canned chickpeas.\n2. In a bowl, combine chickpeas, diced tomato, and chopped onion.\n3. Dress with olive oil, lemon juice, and a pinch of salt.\n4. Toss well and serve chilled or room temperature.",
+                "1. Drain chickpeas into a bowl.\n2. Add diced tomato and chopped onion.\n3. Drizzle with olive oil, lemon juice, and salt.",
                 new String[][]{
                         {"Canned Chickpeas", "1", "can"},
                         {"Tomato", "1", "unit"},
@@ -540,7 +473,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void seedSamplePantry(SQLiteDatabase db) {
-        // Sample ingredients preloaded so app shows immediate functionality
         String[][] samplePantry = {
                 {"Egg", "4", "unit", "2026-11-15", "Dairy & Eggs"},
                 {"Milk", "1", "cup", "2026-11-05", "Dairy & Eggs"},

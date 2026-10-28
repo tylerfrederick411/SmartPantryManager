@@ -2,9 +2,6 @@ package com.richfield.smartpantry.model;
 
 import java.io.Serializable;
 
-/**
- * Model representing an ingredient required by a recipe.
- */
 public class RecipeIngredient implements Serializable {
     private long id;
     private long recipeId;
@@ -69,9 +66,9 @@ public class RecipeIngredient implements Serializable {
 
     public String getFormattedQuantity() {
         if (quantity == (long) quantity) {
-            return String.format("%d", (long) quantity);
+            return String.valueOf((long) quantity);
         } else {
-            return String.format("%.2f", quantity);
+            return String.format("%.1f", quantity);
         }
     }
 }

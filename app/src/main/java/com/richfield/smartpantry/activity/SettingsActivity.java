@@ -14,12 +14,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.richfield.smartpantry.R;
 import com.richfield.smartpantry.database.DatabaseHelper;
 
-/**
- * Screen 5: Settings & Preferences Screen.
- * Satisfies the Section 3.1 minimum screen count requirement.
- * Allows user to toggle expiring-soon notifications, unit preferences,
- * and restore initial database state.
- */
 public class SettingsActivity extends AppCompatActivity {
 
     private Switch switchExpiryAlerts, switchShowAlmostThere;
@@ -32,6 +26,10 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Settings");
+        }
 
         dbHelper = DatabaseHelper.getInstance(this);
         prefs = getSharedPreferences("SmartPantryPrefs", MODE_PRIVATE);
@@ -46,27 +44,26 @@ public class SettingsActivity extends AppCompatActivity {
 
         switchExpiryAlerts.setOnCheckedChangeListener((btn, checked) -> {
             prefs.edit().putBoolean("alerts_enabled", checked).apply();
-            Toast.makeText(this, checked ? "Expiry notifications enabled" : "Expiry notifications disabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, checked ? "Alerts enabled" : "Alerts disabled", Toast.LENGTH_SHORT).show();
         });
 
         switchShowAlmostThere.setOnCheckedChangeListener((btn, checked) -> {
             prefs.edit().putBoolean("almost_there_enabled", checked).apply();
-            Toast.makeText(this, checked ? "'Almost There' suggestions enabled" : "'Almost There' suggestions disabled", Toast.LENGTH_SHORT).show();
         });
 
         btnResetDatabase.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
-                    .setTitle("Reset Database")
-                    .setMessage("This will reset all pantry items and re-seed the 20 default recipes. Are you sure?")
+                    .setTitle("Reset to Default?")
+                    .setMessage("This will restore the 20 default recipes and sample ingredients.")
                     .setPositiveButton("Reset", (dialog, which) -> {
                         dbHelper.resetToDefaults();
-                        Toast.makeText(this, "Database reset to defaults successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Database reset to defaults", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         });
 
-        setupBottomNavigation();
+        setupNavigation();
     }
 
     @Override
@@ -75,19 +72,17 @@ public class SettingsActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.nav_settings);
     }
 
-    private void setupBottomNavigation() {
+    private void setupNavigation() {
         bottomNav.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_settings) {
+            int id = item.getItemId();
+            if (id == R.id.nav_settings) {
                 return true;
-            } else if (itemId == R.id.nav_pantry) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+            } else if (id == R.id.nav_pantry) {
+                startActivity(new Intent(this, MainActivity.class));
                 finish();
                 return true;
-            } else if (itemId == R.id.nav_suggested) {
-                Intent intent = new Intent(this, SuggestedRecipesActivity.class);
-                startActivity(intent);
+            } else if (id == R.id.nav_suggested) {
+                startActivity(new Intent(this, SuggestedRecipesActivity.class));
                 finish();
                 return true;
             }

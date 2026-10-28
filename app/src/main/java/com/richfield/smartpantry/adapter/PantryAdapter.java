@@ -1,7 +1,6 @@
 package com.richfield.smartpantry.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,6 @@ import com.richfield.smartpantry.model.PantryItem;
 
 import java.util.List;
 
-/**
- * Custom RecyclerView Adapter for displaying pantry inventory items.
- * Implements the ViewHolder pattern and delegates actions via callbacks.
- */
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
 
     public interface OnItemActionListener {
@@ -55,10 +50,10 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
 
         holder.tvName.setText(item.getName());
         holder.tvQuantity.setText(item.getFormattedQuantity() + " " + item.getUnit());
-        holder.tvCategory.setText(item.getCategory() != null ? item.getCategory() : "General");
+        holder.tvCategory.setText(item.getCategory() != null && !item.getCategory().isEmpty() ? item.getCategory() : "Pantry");
 
-        if (item.getExpiryDate() != null && !item.getExpiryDate().isEmpty()) {
-            holder.tvExpiry.setText("Expires: " + item.getExpiryDate());
+        if (item.getExpiryDate() != null && !item.getExpiryDate().trim().isEmpty()) {
+            holder.tvExpiry.setText("Exp: " + item.getExpiryDate());
             holder.tvExpiry.setVisibility(View.VISIBLE);
         } else {
             holder.tvExpiry.setVisibility(View.GONE);

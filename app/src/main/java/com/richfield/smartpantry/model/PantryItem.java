@@ -2,16 +2,12 @@ package com.richfield.smartpantry.model;
 
 import java.io.Serializable;
 
-/**
- * Model representing an ingredient stored in the user's pantry.
- * Implements Serializable to facilitate passing data via Intents.
- */
 public class PantryItem implements Serializable {
     private long id;
     private String name;
     private double quantity;
     private String unit;
-    private String expiryDate; // ISO-8601 string: YYYY-MM-DD
+    private String expiryDate;
     private String category;
 
     public PantryItem() {
@@ -78,14 +74,11 @@ public class PantryItem implements Serializable {
         this.category = category;
     }
 
-    /**
-     * Formats the quantity nicely (e.g. "2" instead of "2.0", but "1.5" stays "1.5").
-     */
     public String getFormattedQuantity() {
         if (quantity == (long) quantity) {
-            return String.format("%d", (long) quantity);
+            return String.valueOf((long) quantity);
         } else {
-            return String.format("%.2f", quantity);
+            return String.format("%.1f", quantity);
         }
     }
 }

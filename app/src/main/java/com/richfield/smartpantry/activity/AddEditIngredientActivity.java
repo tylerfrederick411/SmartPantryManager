@@ -21,10 +21,6 @@ import com.richfield.smartpantry.model.PantryItem;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * Screen 2: Add / Edit Ingredient Screen.
- * Demonstrates input validation on all form entries, SQLite CRUD insertion & updating.
- */
 public class AddEditIngredientActivity extends AppCompatActivity {
 
     private EditText etName, etQuantity, etExpiryDate;
@@ -46,6 +42,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Ingredient Details");
         }
 
         dbHelper = DatabaseHelper.getInstance(this);
@@ -79,13 +76,13 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             }
         }
 
-        btnSave.setOnClickListener(v -> saveIngredient());
+        btnSave.setOnClickListener(v -> saveItem());
     }
 
     private void populateFields(PantryItem item) {
         tvScreenTitle.setText("Edit Ingredient");
         etName.setText(item.getName());
-        etQuantity.setText(String.valueOf(item.getQuantity()));
+        etQuantity.setText(item.getFormattedQuantity());
         etExpiryDate.setText(item.getExpiryDate() != null ? item.getExpiryDate() : "");
 
         for (int i = 0; i < UNITS.length; i++) {
@@ -116,10 +113,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         picker.show();
     }
 
-    /**
-     * Rigorous form validation fulfilling rubric requirements.
-     */
-    private void saveIngredient() {
+    private void saveItem() {
         String name = etName.getText().toString().trim();
         String qtyStr = etQuantity.getText().toString().trim();
         String expiry = etExpiryDate.getText().toString().trim();
@@ -147,7 +141,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 return;
             }
         } catch (NumberFormatException e) {
-            etQuantity.setError("Please enter a valid numeric quantity");
+            etQuantity.setError("Please enter a valid number");
             etQuantity.requestFocus();
             return;
         }

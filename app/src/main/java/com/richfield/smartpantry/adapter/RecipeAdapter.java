@@ -16,10 +16,6 @@ import com.richfield.smartpantry.model.RecipeMatchResult;
 
 import java.util.List;
 
-/**
- * Custom RecyclerView Adapter for presenting matched recipes.
- * Visually distinguishes Strict Matches from Almost There recipes.
- */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     public interface OnRecipeClickListener {
@@ -58,18 +54,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.tvPrepTime.setText(recipe.getPrepTimeMinutes() + " mins");
 
         if (result.isStrictMatch()) {
-            holder.tvMatchBadge.setText("Ready to Cook (All " + result.getTotalRequired() + " ingredients ready)");
-            holder.tvMatchBadge.setBackgroundColor(Color.parseColor("#E8F5E9"));
-            holder.tvMatchBadge.setTextColor(Color.parseColor("#2E7D32"));
+            holder.tvMatchBadge.setText("Ready to Cook (All " + result.getTotalRequired() + " ingredients)");
+            holder.tvMatchBadge.setBackgroundResource(R.drawable.badge_match_strict);
+            holder.tvMatchBadge.setTextColor(Color.parseColor("#145A32"));
         } else if (result.isAlmostThere()) {
             String missing = result.getMissingIngredients().get(0).getIngredientName();
-            holder.tvMatchBadge.setText("Almost There: Missing only " + missing);
-            holder.tvMatchBadge.setBackgroundColor(Color.parseColor("#FFF3E0"));
-            holder.tvMatchBadge.setTextColor(Color.parseColor("#E65100"));
+            holder.tvMatchBadge.setText("Need: " + missing);
+            holder.tvMatchBadge.setBackgroundResource(R.drawable.badge_match_almost);
+            holder.tvMatchBadge.setTextColor(Color.parseColor("#935116"));
         } else {
             holder.tvMatchBadge.setText("Missing " + result.getMissingCount() + " ingredients");
-            holder.tvMatchBadge.setBackgroundColor(Color.parseColor("#FFEBEE"));
-            holder.tvMatchBadge.setTextColor(Color.parseColor("#C62828"));
+            holder.tvMatchBadge.setBackgroundResource(R.drawable.badge_match_missing);
+            holder.tvMatchBadge.setTextColor(Color.parseColor("#922B21"));
         }
 
         holder.itemView.setOnClickListener(v -> {
